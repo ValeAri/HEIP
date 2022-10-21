@@ -4,7 +4,17 @@ from collections import OrderedDict
 
 from cellseg_models_pytorch.models import MultiTaskUnet
 
-__all__ = ["get_seg_model", "convert_state_dict"]
+__all__ = ["get_seg_model", "convert_state_dict", "MODEL_PARTS"]
+
+MODEL_PARTS = [
+    "encoder",
+    "inst_decoder",
+    "inst_seg_head",
+    "type_decoder",
+    "type_seg_head",
+    "omnipose_decoder",
+    "omnipose_seg_head",
+]
 
 
 def get_seg_model() -> MultiTaskUnet:
@@ -13,6 +23,9 @@ def get_seg_model() -> MultiTaskUnet:
     The model is a multi-task unet that outputs nuclei type segmentation masks
     with Pannuke classes, fg/bg prediction of the nuclei and omnipose regression
     of the nuclei instances.
+
+    Multi-task architecture inspired by HoVer-Net:
+    - https://www.sciencedirect.com/science/article/pii/S1361841519301045?via%3Dihub
 
 
                     |------ TYPE_DECODER -------- TYPE_HEAD
@@ -38,15 +51,6 @@ def get_seg_model() -> MultiTaskUnet:
             An initialized multi task U-net model with custom architecture.
     """
     pproc = "omnipose"
-    model_parts = [
-        "encoder",
-        "inst_decoder",
-        "inst_seg_head",
-        "type_decoder",
-        "type_seg_head",
-        "omnipose_decoder",
-        "omnipose_seg_head",
-    ]
 
     decoders = ("inst", "type", pproc)
     heads = {"inst": {"inst": 2}, "type": {"type": 6}, pproc: {pproc: 2}}
@@ -201,7 +205,7 @@ def get_seg_model() -> MultiTaskUnet:
         aux_key=pproc,
     )
 
-    return model, model_parts
+    return model
 
 
 def get_ckpt_keys(ckpt: OrderedDict, key: str):

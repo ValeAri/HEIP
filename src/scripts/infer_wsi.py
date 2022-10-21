@@ -4,7 +4,7 @@ from typing import Dict, Any
 from pathlib import Path
 
 from cellseg_models_pytorch.inference import SlidingWindowInferer
-from ..unet import get_seg_model, convert_state_dict
+from ..unet import get_seg_model, convert_state_dict, MODEL_PARTS
 
 
 def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
@@ -81,9 +81,9 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
     """
     ckpt = torch.load(args.ckpt_path, map_location=lambda storage, loc: storage)
 
-    model, model_parts = get_seg_model()
+    model = get_seg_model()
     new_state_dict = convert_state_dict(
-        model_parts, model.state_dict(), ckpt["state_dict"]
+        MODEL_PARTS, model.state_dict(), ckpt["state_dict"]
     )
     model.load_state_dict(new_state_dict, strict=True)
 

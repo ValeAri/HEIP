@@ -2,7 +2,6 @@ import argparse
 import pytorch_lightning as pl
 from typing import Dict, Any
 
-from cellseg_models_pytorch.models import cellpose_plus
 from cellseg_models_pytorch.datasets import SegmentationHDF5Dataset
 from cellseg_models_pytorch.datamodules.custom_datamodule import CustomDataModule
 from cellseg_models_pytorch.training.lit import SegmentationExperiment
@@ -11,6 +10,8 @@ from cellseg_models_pytorch.training.callbacks.wandb_callbacks import (
     WandbGetExamplesCallback,
     WandbClassLineCallback,
 )
+
+from src.unet import get_seg_model
 
 
 def train(args: Dict[str, Any]) -> None:
@@ -57,7 +58,7 @@ def train(args: Dict[str, Any]) -> None:
     )
 
     # Set up segmentation experiment
-    model = cellpose_plus(sem_classes=5, type_classes=7, long_skip="unet")
+    model = get_seg_model()
     experiment = SegmentationExperiment.from_yaml(model, args.yaml_path)
 
     # Set up loggers
