@@ -1,0 +1,38 @@
+branch_losses:
+  omnipose: ssim_mse
+  type: focal_tversky
+  inst: focal_tversky
+
+branch_loss_params:
+  omnipose:
+    apply_svls: False
+    apply_ls: False
+    apply_sd: True
+  type:
+    apply_svls: True
+    apply_ls: True
+    apply_sd: True
+  inst:
+    apply_svls: True
+    apply_ls: True
+    apply_sd: True
+
+branch_metrics:
+  omnipose:
+    - mse
+  type:
+    - miou
+  inst:
+    - miou
+
+optim_params:
+  encoder:
+    lr: 0.00005
+    weight_decay: 0
+  decoder:
+    lr: 0.00003
+    weight_decay: 0
+
+lookahead: False
+scheduler: "reduce_on_plateau"
+log_freq: 100
