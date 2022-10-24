@@ -44,39 +44,39 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
     .
     └──
 
-    NOTE: Resulting masks are save as .json files that can be read with QuPath.
+    NOTE: Resulting masks are saved as .json files that can be read with QuPath.
     The result folder has the following structure:
 
     result_dir/
-    │
-    ├──sample1_patches/
-    |    |
-    |    └── cells/
-    |         ├── patch_x-0_y-0.json
-    |         ├── patch_x-0_y-1000.json
-    |         ├── patch_x-1000_y-0.json
-    |         ├── patch_x-1000_y-1000.json
-    |         .
-    |         .
-    |         .
-    |         └── patch_x-n_y-n.json
     |
-    ├──sample2_patches/
-    |    |
-    |    └── cells/
-    |         ├── patch_x-0_y-0.json
-    |         ├── patch_x-0_y-1000.json
-    |         ├── patch_x-1000_y-0.json
-    |         ├── patch_x-1000_y-1000.json
-    |         .
-    |         .
-    |         .
-    |         └── patch_x-n_y-n.json
-    |
-    .
-    .
-    .
-    └──
+    └── cells/
+        │
+        ├──sample1_patches/
+        |    |
+        |    ├── patch_x-0_y-0.json
+        |    ├── patch_x-0_y-1000.json
+        |    ├── patch_x-1000_y-0.json
+        |    ├── patch_x-1000_y-1000.json
+        |    .
+        |    .
+        |    .
+        |    └── patch_x-n_y-n.json
+        |
+        ├──sample2_patches/
+        |    |
+        |    ├── patch_x-0_y-0.json
+        |    ├── patch_x-0_y-1000.json
+        |    ├── patch_x-1000_y-0.json
+        |    ├── patch_x-1000_y-1000.json
+        |    .
+        |    .
+        |    .
+        |    └── patch_x-n_y-n.json
+        |
+        .
+        .
+        .
+        └──
 
     """
     ckpt = torch.load(args.ckpt_path, map_location=lambda storage, loc: storage)
@@ -110,7 +110,7 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
             padding=args.padding,
             instance_postproc="omnipose",
             batch_size=args.batch_size,
-            save_dir=save_dir,
+            save_dir=res_dir,
             save_format=".json",
             geo_format=args.geo_format,
             offsets=bool(args.offsets),
