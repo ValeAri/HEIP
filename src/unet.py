@@ -17,7 +17,11 @@ MODEL_PARTS = [
 ]
 
 
-def get_seg_model() -> MultiTaskUnet:
+def get_seg_model(
+    depth: int = 5,
+    encoder: str = "tf_efficientnetv2_l",
+    type_classes: int = 6,
+) -> MultiTaskUnet:
     """Build the cellseg_models_pytorch version of the HEIP segmentation model.
 
     The model is a multi-task unet that outputs nuclei type segmentation masks
@@ -34,16 +38,24 @@ def get_seg_model() -> MultiTaskUnet:
                     |
                     |------ INSTANCE_DECODER ---- INSTANCE_HEAD
 
-
     U-Net architectural choices
     ---------------------------
-    - encoder: ImageNet pre-trained Efficient-Net v2 L-variant.
+    - encoder: ImageNet pre-trained encoder, default=Efficient-Net v2 L-variant.
     - long skip: normal u-net style with concatenation
     - short skip: residual
     - normalization: batch channel normalization
     - activation: leaky-relu
     - convolution: weight standardized convolution
     - attention: squeeze and excite
+
+    Parameters
+    ----------
+        depth : int, default=5
+            The depth/#stages of the encoder and decoders.
+        encoder : str, default=effnetv2
+            The name of the `timm` library encoder. These are always pre-trained.
+
+
 
     Returns
     -------
@@ -53,97 +65,34 @@ def get_seg_model() -> MultiTaskUnet:
     pproc = "omnipose"
 
     decoders = ("inst", "type", pproc)
-    heads = {"inst": {"inst": 2}, "type": {"type": 6}, pproc: {pproc: 2}}
+    heads = {"inst": {"inst": 2}, "type": {"type": type_classes}, pproc: {pproc: 2}}
+
+    out_channels = (256, 128, 64, 32, 16)
+    out_channels = out_channels[:depth]
 
     out_channels = {
-        "type": (256, 128, 64, 32, 16),
-        "inst": (256, 128, 64, 32, 16),
-        pproc: (256, 128, 64, 32, 16),
+        "type": out_channels,
+        "inst": out_channels,
+        pproc: out_channels,
     }
 
     n_layers = {
-        "inst": (1, 1, 1, 1, 1),
-        "type": (1, 1, 1, 1, 1),
-        pproc: (1, 1, 1, 1, 1),
+        "inst": (1,) * depth,
+        "type": (1,) * depth,
+        pproc: (1,) * depth,
     }
 
     n_blocks = {
-        "inst": ((2,), (2,), (2,), (2,), (2,)),
-        "type": ((2,), (2,), (2,), (2,), (2,)),
-        pproc: ((2,), (2,), (2,), (2,), (2,)),
+        "inst": ((2,),) * depth,
+        "type": ((2,),) * depth,
+        pproc: ((2,),) * depth,
     }
 
+    # long skip strategy for each decoder
     long_skips = {"type": "unet", "inst": "unet", pproc: "unet"}
 
-    stage1_deocder = {
-        "layer_residual": False,
-        "merge_policy": "cat",
-        "short_skips": ("basic",),
-        "block_types": (("basic_old", "basic_old"),),
-        "kernel_sizes": ((3, 3),),
-        "expand_ratios": ((1.0, 1.0),),
-        "groups": ((1, 1),),
-        "biases": ((True, True),),
-        "normalizations": (("bcn", "bcn"),),
-        "activations": (("leaky-relu", "leaky-relu"),),
-        "convolutions": (("wsconv", "wsconv"),),
-        "attentions": ((None, "se"),),
-        "preactivates": ((False, False),),
-        "preattends": ((False, False),),
-        "use_styles": ((False, False),),
-    }
-    stage2_deocder = {
-        "layer_residual": False,
-        "merge_policy": "cat",
-        "short_skips": ("basic",),
-        "block_types": (("basic_old", "basic_old"),),
-        "kernel_sizes": ((3, 3),),
-        "expand_ratios": ((1.0, 1.0),),
-        "groups": ((1, 1),),
-        "biases": ((True, True),),
-        "normalizations": (("bcn", "bcn"),),
-        "activations": (("leaky-relu", "leaky-relu"),),
-        "convolutions": (("wsconv", "wsconv"),),
-        "attentions": ((None, "se"),),
-        "preactivates": ((False, False),),
-        "preattends": ((False, False),),
-        "use_styles": ((False, False),),
-    }
-    stage3_deocder = {
-        "layer_residual": False,
-        "merge_policy": "cat",
-        "short_skips": ("basic",),
-        "block_types": (("basic_old", "basic_old"),),
-        "kernel_sizes": ((3, 3),),
-        "expand_ratios": ((1.0, 1.0),),
-        "groups": ((1, 1),),
-        "biases": ((True, True),),
-        "normalizations": (("bcn", "bcn"),),
-        "activations": (("leaky-relu", "leaky-relu"),),
-        "convolutions": (("wsconv", "wsconv"),),
-        "attentions": ((None, "se"),),
-        "preactivates": ((False, False),),
-        "preattends": ((False, False),),
-        "use_styles": ((False, False),),
-    }
-    stage4_deocder = {
-        "layer_residual": False,
-        "merge_policy": "cat",
-        "short_skips": ("basic",),
-        "block_types": (("basic_old", "basic_old"),),
-        "kernel_sizes": ((3, 3),),
-        "expand_ratios": ((1.0, 1.0),),
-        "groups": ((1, 1),),
-        "biases": ((True, True),),
-        "normalizations": (("bcn", "bcn"),),
-        "activations": (("leaky-relu", "leaky-relu"),),
-        "convolutions": (("wsconv", "wsconv"),),
-        "attentions": ((None, "se"),),
-        "preactivates": ((False, False),),
-        "preattends": ((False, False),),
-        "use_styles": ((False, False),),
-    }
-    stage5_deocder = {
+    # Set parameters for deocdedr stages.
+    stage_deocder = {
         "layer_residual": False,
         "merge_policy": "cat",
         "short_skips": ("basic",),
@@ -161,28 +110,9 @@ def get_seg_model() -> MultiTaskUnet:
         "use_styles": ((False, False),),
     }
 
-    type_dec_params = (
-        stage1_deocder,
-        stage2_deocder,
-        stage3_deocder,
-        stage4_deocder,
-        stage5_deocder,
-    )
-
-    inst_dec_params = (
-        stage1_deocder,
-        stage2_deocder,
-        stage3_deocder,
-        stage4_deocder,
-        stage5_deocder,
-    )
-    pproc_dec_params = (
-        stage1_deocder,
-        stage2_deocder,
-        stage3_deocder,
-        stage4_deocder,
-        stage5_deocder,
-    )
+    type_dec_params = (stage_deocder,) * depth
+    inst_dec_params = (stage_deocder,) * depth
+    pproc_dec_params = (stage_deocder,) * depth
 
     dec_params = {
         "type": type_dec_params,
@@ -193,8 +123,8 @@ def get_seg_model() -> MultiTaskUnet:
     model = MultiTaskUnet(
         decoders=decoders,
         heads=heads,
-        enc_name="tf_efficientnetv2_l",
-        depth=5,
+        enc_name=encoder,
+        depth=depth,
         style_channels=None,
         n_layers=n_layers,
         n_blocks=n_blocks,
