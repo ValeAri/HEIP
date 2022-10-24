@@ -1,4 +1,5 @@
 histoprep
 cellseg-models-pytorch[all]
 pytest
+omegaconf
 -e ./
