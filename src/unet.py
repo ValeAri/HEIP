@@ -52,15 +52,14 @@ def get_seg_model(
     ----------
         depth : int, default=5
             The depth/#stages of the encoder and decoders.
-        encoder : str, default=effnetv2
+        encoder : str, default="tf_efficientnetv2_l"
             The name of the `timm` library encoder. These are always pre-trained.
-
 
 
     Returns
     -------
         MultiTaskUnet:
-            An initialized multi task U-net model with custom architecture.
+            An initialized multi task U-net model with a custom architecture.
     """
     pproc = "omnipose"
 

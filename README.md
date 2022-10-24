@@ -47,3 +47,21 @@ pip install -r requirements.txt
 2. [Pre-process HE images](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/2_pre-proc.ipynb).
 3. [Train a segmentation model for HE images with a training set](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/3_train_seg_model.ipynb).
 4. [Run inference with the segmentation model](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/4_inference.ipynb).
+
+#### Run instance segmentation training and inference with SLURM from CLI
+
+**NOTE** You might want to modify the batchscripts to your needs (setting up right paths etc).
+
+**Training**
+
+```shell
+cd HEIP_HE-image-analysis-pipeline/
+sbatch ./batchscripts/train.sh
+```
+
+**Inference**
+
+```shell
+cd HEIP_HE-image-analysis-pipeline/
+sbatch ./batchscripts/infer_wsi.sh
+```
