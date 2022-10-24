@@ -31,6 +31,8 @@ srun python $SCRIPT_PATH/train.py \
     --train_ds $DATA_PATH/exp1/train_cin_320x320s80_simple.h5 \
     --valid_ds $DATA_PATH/exp1/valid_cin_256x256s256_simple.h5 \
     --test_ds $DATA_PATH/exp1/valid_cin_256x256s256_simple.h5 \
+    --depth 5 \
+    --encoder 'tf_efficientnetv2_l' \
     --inst_tr 'cellpose' \
     --img_tr 'blur,hue_sat' \
     --norm 'minmax' \

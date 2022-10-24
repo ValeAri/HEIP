@@ -58,7 +58,7 @@ def train(args: Dict[str, Any]) -> None:
     )
 
     # Set up segmentation experiment
-    model = get_seg_model()
+    model = get_seg_model(args.depth, args.encoder)
     experiment = SegmentationExperiment.from_yaml(model, args.yaml_path)
 
     # Set up loggers
@@ -146,6 +146,20 @@ if __name__ == "__main__":
         required=True,
         metavar="YAML",
         help="The path to the segmentation experiment yaml config file.",
+    )
+    parser.add_argument(
+        "--encoder",
+        type=str,
+        required=True,
+        metavar="ENCODER",
+        help="The name of the timm encoder. See timm docs for more info.",
+    )
+    parser.add_argument(
+        "--depth",
+        type=str,
+        required=True,
+        metavar="DEPTH",
+        help="The depth of the encoder.",
     )
     parser.add_argument(
         "--exp_dir",
