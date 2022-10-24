@@ -2,9 +2,9 @@
 
 [![Generic badge](https://img.shields.io/badge/License-MIT-<COLOR>.svg?style=for-the-badge)](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/LICENSE) [![Python - Version](https://img.shields.io/badge/PYTHON-3.7+-red?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
-![schema](./images/pipeline_flow.png)
-
 **HEIP (HE-image-analysis-pipeline) is a set of tools to run end-to-end HE-image analysis.**
+
+![schema](./images/pipeline_flow.png)
 
 ## Introduction
 
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 3. [Train a segmentation model for HE images with a training set](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/3_train_seg_model.ipynb).
 4. [Run inference with the segmentation model](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/4_inference.ipynb).
 
-#### Run instance segmentation training and inference with SLURM from CLI
+### Run instance segmentation training and inference with SLURM from CLI
 
 **NOTE** You might want to modify the batchscripts to your needs (setting up right paths etc).
 
