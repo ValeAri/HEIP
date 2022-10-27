@@ -1,14 +1,17 @@
 # HEIP
 
+**HEIP (HE-image-analysis-pipeline): set of tools to run end-to-end HE-image analysis**
+
+![schema](./images/Img1-Pipeline.png)
+
 [![Generic badge](https://img.shields.io/badge/License-MIT-<COLOR>.svg?style=for-the-badge)](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/LICENSE) [![Python - Version](https://img.shields.io/badge/PYTHON-3.7+-red?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-
-**HEIP (HE-image-analysis-pipeline) is a set of tools to run end-to-end HE-image analysis.**
-
-![schema](./images/pipeline_flow.png)
 
 ## Introduction
 
-HEIP is a fully fledged HE-image pipeline that consists of different tools ranging from HE-image patching, pre-processing, segmentation, and downstream feature extraction, segmentation tile merging etc. TODO: More text
+HEIP is a fully fledged pipeline for extracting cell level information from hematoxylin and eosin (H&E) whole slides. It consists of different steps and related tools ranging from HE-image patching, pre-processing, cell segmentation and classification, until downstream feature extraction. The pipeline, written entirely in Python, is modular and it is easy to add additional or modify existing steps. 
+
+To demonstrate the potential of HEIP, the pipeline was applied to analyze high-grade serous carcinoma H&E slides and the complete study is available in xxx journal at link.(Add journal name and link!)
+
 
 ## Set Up
 
