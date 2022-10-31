@@ -46,10 +46,11 @@ pip install -r requirements.txt
 
 ## Notebook examples
 
-1. [Patching HE images](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/1_patching.ipynb).
-2. [Pre-process HE images](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/2_pre-proc.ipynb).
+1. [Patching HE images](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/1_WSI_Patching.ipynb).
+2. [Pre-process HE images](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/2_Preprocessing.ipynb).
 3. [Train a segmentation model for HE images with a training set](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/3_train_seg_model.ipynb).
 4. [Run inference with the segmentation model](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/4_inference.ipynb).
+5. [Morphological features extraction from all cells in the WSI](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/examples/Downstream-Analysis.ipynb).
 
 ### Run instance segmentation training and inference with SLURM from CLI
 
