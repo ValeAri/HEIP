@@ -3,22 +3,6 @@ import pandas as pd
 from shapely.geometry import LineString
 import math
 
-# Function to count how many neoplastic, inflammatory and connective cells are in the referred areas
-def selected_area_cell_counting(ref_poly,ref_cells): #(list of poligons with the referred areas,list of all cells(polygons) in the WSI)
-    cells_list=[]
-    poly_list=[]
-    for i in range(0,len(ref_cells)):
-        centroids=ref_cells.geometry[i].centroid
-        for j in range(0,len(ref_poly)):
-            if ref_poly.geometry[j].contains(centroids):
-                poly_list.append(ref_cells.geometry[i])
-                cells_list.append(ref_cells.properties[i]['classification']['name'])
-    unique, counts = np.unique(np.array(cells_list), return_counts=True)
-    data=dict(zip(['neoplastic','inflammatory','connective'],[counts[np.where(unique=="neoplastic")][0]
-        ,counts[np.where(unique=="inflammatory")][0]
-        ,counts[np.where(unique=="connective")][0]]))
-    return data,poly_list,cells_list
-
 
 # Function to count how many neoplastic, inflammatory and connective cells are in the entire WSI
 def cell_counting(ref_cells):#(List of all cells(polygons) in the WSI)
@@ -33,32 +17,6 @@ def cell_counting(ref_cells):#(List of all cells(polygons) in the WSI)
         ,counts[np.where(unique=="inflammatory")][0]
         ,counts[np.where(unique=="connective")][0]]))
     return data,poly_list,cells_list
-
-
-# Function to extract features from the cells of each referred area in WSI
-def CancerArea_cell_features(ref_poly,ref_cells): #(list of poligons with the referred areas,list of all cells(polygons) in the WSI)
-    poly_list=[]
-    for j in range(0,len(ref_poly)):
-        ca="CancerArea_n"+str(j)
-        for i in range(0,len(ref_cells)):
-            centroids=ref_cells.geometry[i].centroid
-            if ref_poly.geometry[j].contains(centroids):
-                geom=[ref_cells.geometry[i]]
-                minor_axis,major_axis,aspect_ratio=geoAxis(geom)
-
-                poly_list.append([ca, ref_cells.properties[i]['classification']['name'],\
-                geoArea(geom)[0],\
-                geoSolidity(geom)[0],\
-                geoEccentricity(geom)[0],\
-                geoRotation(geom)[0],\
-                minor_axis[0],\
-                major_axis[0],\
-                aspect_ratio[0],\
-                geoRoundness(geom)[0],\
-                geoPerimeter(geom)[0]])
-        
-    df=pd.DataFrame(poly_list,columns=['CellType','Area','Solidity','Eccentricity','Rotation','MinorAxis','MajorAxis','Aspect ratio','Roundness','Perimeter'])
-    return(df)
 
 # Function to extract features from the cells in WSI
 def cell_features(ref_cells): #(List of all cells(polygons) in the WSI)
