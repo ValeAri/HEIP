@@ -1,5 +1,7 @@
 histoprep
 cellseg-models-pytorch[all]
+geopandas
+shapely
 pytest
 omegaconf
 -e ./
