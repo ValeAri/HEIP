@@ -54,6 +54,26 @@ class GSONTile:
 
         return length
 
+    def __set_value(
+        self, anns1: gpd.GeoDataFrame, anns2: gpd.GeoDataFrame
+    ) -> gpd.GeoDataFrame:
+        """Catch annoying future warning to not flood stdout."""
+        with warnings.catch_warnings():
+            # Setting values in-place is fine, ignore the warning in Pandas >= 1.5.0
+            # This can be removed, if Pandas 1.5.0 does not need to be supported any
+            # longer. See also: https://stackoverflow.com/q/74057367/859591
+            warnings.filterwarnings(
+                "ignore",
+                category=FutureWarning,
+                message=(
+                    ".*will attempt to set the values inplace instead of always setting a new array. "
+                    "To retain the old behavior, use either.*"
+                ),
+            )
+            anns1.loc[:, "geometry"] = anns2
+
+        return anns1
+
     def _get_xy_coords(self, fname: str) -> Tuple[int, int]:
         """fname needs to contain x & y-coordinates in "x-[coord1]_y-[coord2]"-format"""
         if isinstance(fname, Path):
@@ -130,7 +150,8 @@ class GSONTile:
         not_b = self.gdf["ymax"] != self.ymax
         not_t = self.gdf["ymin"] != self.ymin
         non_border_annots = self.gdf[not_r & not_l & not_b & not_t].copy()
-        non_border_annots.loc[:, "geometry"] = non_border_annots
+        # non_border_annots.loc[:, "geometry"] = non_border_annots
+        non_border_annots = self.__set_value(non_border_annots, non_border_annots)
         non_border_annots = non_border_annots.reset_index(drop=True)
         return non_border_annots
 
@@ -140,7 +161,10 @@ class GSONTile:
         r_border_anns = self.gdf[self.gdf["xmax"] == self.xmax].copy()
 
         # translate one unit right
-        r_border_anns.loc[:, "geometry"] = r_border_anns.translate(xoff=1.0)
+        # r_border_anns.loc[:, "geometry"] = r_border_anns.translate(xoff=1.0)
+        r_border_anns = self.__set_value(
+            r_border_anns, r_border_anns.translate(xoff=1.0)
+        )
         r_border_anns = r_border_anns.reset_index(drop=True)
         return r_border_anns
 
@@ -148,7 +172,8 @@ class GSONTile:
     def left_border_annots(self) -> gpd.GeoDataFrame:
         """Get all the annotations/polygons that touch the left edge of the tile."""
         l_border_anns = self.gdf[self.gdf["xmin"] == self.xmin].copy()
-        l_border_anns.loc[:, "geometry"] = l_border_anns
+        # l_border_anns.loc[:, "geometry"] = l_border_anns
+        l_border_anns = self.__set_value(l_border_anns, l_border_anns)
         l_border_anns = l_border_anns.reset_index(drop=True)
         return l_border_anns
 
@@ -160,7 +185,10 @@ class GSONTile:
         """
         b_border_anns = self.gdf[self.gdf["ymax"] == self.ymax].copy()
         # translate 1-unit down
-        b_border_anns.loc[:, "geometry"] = b_border_anns.translate(yoff=1.0)
+        # b_border_anns.loc[:, "geometry"] = b_border_anns.translate(yoff=1.0)
+        b_border_anns = self.__set_value(
+            b_border_anns, b_border_anns.translate(yoff=1.0)
+        )
         b_border_anns = b_border_anns.reset_index(drop=True)
         return b_border_anns
 
@@ -173,7 +201,10 @@ class GSONTile:
         b = (self.gdf["ymax"] == self.ymax) & (self.gdf["xmin"] == self.xmin)
         bl_border_anns = self.gdf[b].copy()
         # translate 1-unit down
-        bl_border_anns.loc[:, "geometry"] = bl_border_anns.translate(yoff=1.0)
+        # bl_border_anns.loc[:, "geometry"] = bl_border_anns.translate(yoff=1.0)
+        bl_border_anns = self.__set_value(
+            bl_border_anns, bl_border_anns.translate(yoff=1.0)
+        )
         bl_border_anns = bl_border_anns.reset_index(drop=True)
         return bl_border_anns
 
@@ -186,7 +217,10 @@ class GSONTile:
         b = (self.gdf["ymax"] == self.ymax) & (self.gdf["xmax"] == self.xmax)
         br_border_anns = self.gdf[b].copy()
         # translate 1-unit down and right
-        br_border_anns.loc[:, "geometry"] = br_border_anns.translate(yoff=1.0, xoff=1.0)
+        # br_border_anns.loc[:, "geometry"] = br_border_anns.translate(yoff=1.0, xoff=1.0)
+        br_border_anns = self.__set_value(
+            br_border_anns, br_border_anns.translate(yoff=1.0, xoff=1.0)
+        )
         br_border_anns = br_border_anns.reset_index(drop=True)
         return br_border_anns
 
@@ -197,7 +231,8 @@ class GSONTile:
         NOTE: Origin in the top-left corner of the image/tile.
         """
         t_border_anns = self.gdf[self.gdf["ymin"] == self.ymin].copy()
-        t_border_anns.loc[:, "geometry"] = t_border_anns
+        # t_border_anns.loc[:, "geometry"] = t_border_anns
+        t_border_anns = self.__set_value(t_border_anns, t_border_anns)
         t_border_anns = t_border_anns.reset_index(drop=True)
         return t_border_anns
 
@@ -209,7 +244,10 @@ class GSONTile:
         """
         b = (self.gdf["ymin"] == self.ymin) & (self.gdf["xmax"] == self.xmax)
         tr_border_anns = self.gdf[b].copy()
-        tr_border_anns.loc[:, "geometry"] = tr_border_anns.translate(xoff=1.0)
+        # tr_border_anns.loc[:, "geometry"] = tr_border_anns.translate(xoff=1.0)
+        tr_border_anns = self.__set_value(
+            tr_border_anns, tr_border_anns.translate(xoff=1.0)
+        )
         tr_border_anns = tr_border_anns.reset_index(drop=True)
         return tr_border_anns
 
@@ -221,6 +259,7 @@ class GSONTile:
         """
         b = (self.gdf["ymin"] == self.ymin) & (self.gdf["xmin"] == self.xmin)
         tl_border_anns = self.gdf[b].copy()
-        tl_border_anns.loc[:, "geometry"] = tl_border_anns
+        # tl_border_anns.loc[:, "geometry"] = tl_border_anns
+        tl_border_anns = self.__set_value(tl_border_anns, tl_border_anns)
         tl_border_anns = tl_border_anns.reset_index(drop=True)
         return tl_border_anns
