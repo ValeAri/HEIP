@@ -100,6 +100,10 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
     for d in Path(args.in_dir).iterdir():
         print(f"inference: {d}")
 
+        save_dir = res_dir / d.name / "cells"
+        if not Path(save_dir).exists():
+            Path(save_dir).mkdir(parents=True, exist_ok=True)
+
         inferer = SlidingWindowInferer(
             model,
             d,
@@ -110,7 +114,7 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
             padding=args.padding,
             instance_postproc="omnipose",
             batch_size=args.batch_size,
-            save_dir=res_dir,
+            save_dir=save_dir,
             save_format=".json",
             geo_format=args.geo_format,
             offsets=bool(args.offsets),
