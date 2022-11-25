@@ -242,7 +242,7 @@ class CellMerger(BaseGSONMerger):
 
         return new_polys
 
-    def merge(self, fname: str) -> None:
+    def merge(self, fname: str, use_pbar: bool = True) -> None:
         """Merge all geojsons to one file and handle the split cells at the img borders.
 
         NOTE:
@@ -253,11 +253,15 @@ class CellMerger(BaseGSONMerger):
         ----------
             fname : str, default=None):
                 name/filepath of the geojson file that is written
+            use_pbar : bool, default=True
+                Flag, whether to use progress bar.
         """
         annotations = []
-        pbar = tqdm(self.files)
-        for f in pbar:
-            pbar.set_description(f"Processing file: {f.name}")
+
+        it = tqdm(self.files) if use_pbar else self.files
+        for f in it:
+            if use_pbar:
+                it.set_description(f"Processing file: {f.name}")
 
             # get adjascent tiles
             adj = self._get_adjascent_tiles(f.name)

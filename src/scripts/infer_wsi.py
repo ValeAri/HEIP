@@ -49,34 +49,36 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
 
     result_dir/
     |
-    └── cells/
-        │
-        ├──sample1_patches/
-        |    |
-        |    ├── patch_x-0_y-0.json
-        |    ├── patch_x-0_y-1000.json
-        |    ├── patch_x-1000_y-0.json
-        |    ├── patch_x-1000_y-1000.json
-        |    .
-        |    .
-        |    .
-        |    └── patch_x-n_y-n.json
-        |
-        ├──sample2_patches/
-        |    |
-        |    ├── patch_x-0_y-0.json
-        |    ├── patch_x-0_y-1000.json
-        |    ├── patch_x-1000_y-0.json
-        |    ├── patch_x-1000_y-1000.json
-        |    .
-        |    .
-        |    .
-        |    └── patch_x-n_y-n.json
-        |
-        .
-        .
-        .
-        └──
+    ├── sample1_patches/
+    |   │
+    |   ├──cells/
+    |        |
+    |        ├── patch_x-0_y-0.json
+    |        ├── patch_x-0_y-1000.json
+    |        ├── patch_x-1000_y-0.json
+    |        ├── patch_x-1000_y-1000.json
+    |        .
+    |        .
+    |        .
+    |        └── patch_x-n_y-n.json
+    |
+    ├──sample2_patches/
+    |    │
+    |    ├──cells/
+    |        |
+    |        ├── patch_x-0_y-0.json
+    |        ├── patch_x-0_y-1000.json
+    |        ├── patch_x-1000_y-0.json
+    |        ├── patch_x-1000_y-1000.json
+    |        .
+    |        .
+    |        .
+    |        └── patch_x-n_y-n.json
+    |
+    .
+    .
+    .
+    └──
 
     """
     ckpt = torch.load(args.ckpt_path, map_location=lambda storage, loc: storage)
