@@ -4,7 +4,7 @@ from typing import Dict, Any
 from pathlib import Path
 
 from cellseg_models_pytorch.inference import SlidingWindowInferer
-from ..unet import get_seg_model, convert_state_dict, MODEL_PARTS
+from src.unet import get_seg_model, convert_state_dict, MODEL_PARTS
 
 
 def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
