@@ -102,7 +102,7 @@ def run_infer_wsi_patches(args: Dict[str, Any]) -> None:
     for d in Path(args.in_dir).iterdir():
         print(f"inference: {d}")
 
-        save_dir = res_dir / d.name / "cells"
+        save_dir = res_dir / d.name
         if not Path(save_dir).exists():
             Path(save_dir).mkdir(parents=True, exist_ok=True)
 
