@@ -6,16 +6,21 @@ from typing import Dict, Any
 def patching(args: Dict[str, Any]) -> None:
     """Creation of patches from WSI"""
 
-    cutter = hp.SlideReader(args.sample_name)
-    _ = cutter.save_tiles(
-        output_dir=args.output_dir,
-        coordinates=cutter.get_tile_coordinates(  # patch cutter info
+    reader = hp.SlideReader(args.sample_name)
+    
+    threshold, tissue_mask = reader.get_tissue_mask(level=-1) # Detect the tissue
+    
+    _ = reader.save_regions(
+        parent_dir=args.output_dir,
+        coordinates=reader.get_tile_coordinates(  # patch cutter info
+            tissue_mask,
             width=args.width,  # patches dimension
             overlap=args.overlap,  # no overlap
             max_background=args.max_background,  # background accepted
         ),
         image_format=args.image_format,  # format of the saved patches
         quality=args.quality,  # quality of the saved patch images
+        save_metrics=True  #Save image metrics to metadata
     )
 
 
