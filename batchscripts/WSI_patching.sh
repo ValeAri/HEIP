@@ -7,7 +7,7 @@ OUTPUT_PATH='/path/to/output'
 SCRIPT_PATH='/path/to/scripts'
 
 for input_file in "$@"; do
-	srun python $SCRIPT_PATH/Patching.py \
+	srun python $SCRIPT_PATH/patching.py \
 	--sampl_name $DATA_PATH \
 	--output_dir $OUTPUT_PATH \
 	--width 1250 \
