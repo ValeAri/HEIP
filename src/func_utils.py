@@ -389,7 +389,7 @@ def geoEllisVolume(cells_list: List[Polygon]) -> List[float]:
             The cell perimeters in a list.
     """
     volume=[]
-    minor_axis,major_axis,aspect_ratio=geoAxis(cells_list)
+    minor_axis,major_axis,aspect_ratio=geo_axis(cells_list)
     for i in range(0,(len(minor_axis))): 
         V= (4/3) * math.pi * ((minor_axis[i]/2) ** 2) * major_axis[i]/2
         volume.append(V)
