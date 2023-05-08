@@ -4,4 +4,5 @@ geopandas
 shapely
 pytest
 omegaconf
+pyarrow
 -e ./
