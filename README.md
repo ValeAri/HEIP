@@ -2,7 +2,7 @@
 
 **HEIP (HE-image-analysis-pipeline): set of tools to run end-to-end HE-image analysis**
 
-![schema](./images/Img1-Pipeline.png)
+![schema](./images/Pipeline2023.png)
 
 [![Generic badge](https://img.shields.io/badge/License-MIT-<COLOR>.svg?style=for-the-badge)](https://github.com/ValeAri/HEIP_HE-image-analysis-pipeline/blob/main/LICENSE) [![Python - Version](https://img.shields.io/badge/PYTHON-3.7+-red?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
