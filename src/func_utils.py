@@ -17,6 +17,8 @@ __all__ = [
     "geo_roundness",
     "geo_axis",
     "geo_perimeter",
+    "geoSferVolume",
+    "geoEllisVolume"
 ]
 
 
