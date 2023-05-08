@@ -23,8 +23,8 @@ def preprocessing:
     filtered_coordinates=[]
     filtered_xy=[]
     for i in range(0,len(metadata)):
-        if metadata['hue_q=0.1'][i]>args.hue_q01 or metadata['black_pixels'][i]>args.black_pixels or metadata['brightness_q=0.1'][i]<args.brightness_q01 \
-        or metadata['saturation_q=0.5'][i]<args.saturation_q05 or metadata['sharpness_max'][i]<args.sharpness_max:
+        if metadata['hue_q10'][i]>args.hue_q10 or metadata['black_pixels'][i]>args.black_pixels or metadata['brightness_q10'][i]<args.brightness_q10 \
+        or metadata['saturation_q50'][i]<args.saturation_q50 or metadata['laplacian_std'][i]<args.laplacian:
 
             filtered_coordinates.append(i)
             filtered_xy.append([metadata['y'][i],metadata['x'][i]])
@@ -49,9 +49,9 @@ def preprocessing:
         name_coord=output_folder+'/tiles/'+'x'+str(coord[1])+'_y'+str(coord[0])+'_w'+str(width)+'_h'+str(width)+'.png'
         os.remove(name_coord)
     #Code to identify all the tissue present in the slide, expecially if there are more than one!
-    thumb=Image.open(os.path.join(output_folder,"thumbnail.jpeg"))
-
-    image,mask =hp.functional.detect_tissue(thumb)
+    thumb=hp.SlideReader(os.path.join(output_folder,"thumbnail.jpeg"))
+    image,mask =thumb.get_tissue_mask()
+    
     kernel_size = (args.kernel_size,args.kernel_size) #Change the kernel size
     mask2 = cv2.dilate(mask, np.ones(kernel_size, np.uint8), iterations=5)
     #plt.imshow(mask2)
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         help="The kernel size for the dilatation function for get all the tissue present in the slide",
     )
     parser.add_argument(
-        "--hue_q01",
+        "--hue_q10",
         type=int,
         default='144',
         help="The hue_q=0.1 parameter from Histoprep metadata.",
@@ -152,21 +152,21 @@ if __name__ == "__main__":
         help="The black_pixels parameter from Histoprep metadata.",
     )
     parser.add_argument(
-        "--brightness_q01",
+        "--brightness_q10",
         type=int,
         default=45,
         help="The brightness_q=0.1 parameter from Histoprep metadata.",
     )
     parser.add_argument(
-        "--saturation_q05",
+        "--saturation_q50",
         type=int,
         default=30,
         help="The saturation_q=0.5 parameter from Histoprep metadata.",
     )
     parser.add_argument(
-        "--sharpness_max",
+        "--laplacian",
         type=int,
-        default=5,
+        default=8,
         help="The sharpness_max parameter from Histoprep metadata .",
     )
 
