@@ -82,6 +82,8 @@ def cell_features(ref_cells: gpd.GeoDataFrame) -> pd.DataFrame:
             [
                 ref_cells.properties[i]["classification"]["name"],
                 geo_area(geom)[0],
+                geoSferVolume(geom)[0],\
+                geoEllisVolume(geom)[0],\
                 geo_solidity(geom)[0],
                 geo_eccentricity(geom)[0],
                 geo_rotation(geom)[0],
@@ -98,6 +100,8 @@ def cell_features(ref_cells: gpd.GeoDataFrame) -> pd.DataFrame:
         columns=[
             "CellType",
             "Area",
+            "Sf_Volume",
+            "El_Volume",
             "Solidity",
             "Eccentricity",
             "Rotation",
@@ -348,3 +352,43 @@ def geo_perimeter(cells_list: List[Polygon]) -> List[float]:
         perimeter.append(cells_list[i].length)
 
     return perimeter
+def geoSferVolume(cells_list: List[Polygon]) -> List[float]:
+    """Compute the volume with sphere formula of the cells.
+
+    Parameters
+    ----------
+        cells_list : List[Polygon]
+            A list of shapely polygons representing cells.
+
+    Returns
+    -------
+        List[float]:
+            The cell perimeters in a list.
+    """
+    volume=[]
+    for i in range(0,len(cells_list)):
+        areas=cells_list[i].area
+        radius = math.sqrt(areas / (4 * math.pi))
+        V=(4/3)*math.pi * (radius ** 3)
+        volume.append(V)
+    return volume
+
+def geoEllisVolume(cells_list: List[Polygon]) -> List[float]:
+    """Compute the volume with ellipsoid formula of the cells.
+
+    Parameters
+    ----------
+        cells_list : List[Polygon]
+            A list of shapely polygons representing cells.
+
+    Returns
+    -------
+        List[float]:
+            The cell perimeters in a list.
+    """
+    volume=[]
+    minor_axis,major_axis,aspect_ratio=geoAxis(cells_list)
+    for i in range(0,(len(minor_axis))): 
+        V= (4/3) * math.pi * ((minor_axis[i]/2) ** 2) * major_axis[i]/2
+        volume.append(V)
+    return volume
