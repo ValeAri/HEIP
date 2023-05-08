@@ -22,7 +22,7 @@ git clone git@github.com:ValeAri/HEIP_HE-image-analysis-pipeline.git
 
 2. cd to the repository `cd <path>/HEIP_HE-image-analysis-pipeline/`
 
-3. Create environment (optional but recommended)
+3. Create environment with python >3.7 and <3.11 (optional but recommended)
 
 ```
 conda create --name HEIP python
