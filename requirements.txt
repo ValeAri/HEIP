@@ -1,5 +1,5 @@
 histoprep
-cellseg-models-pytorch[all]
+cellseg-models-pytorch[all]== 0.1.16
 geopandas
 shapely
 pytest
