@@ -42,6 +42,9 @@ pip install -U pip
 ```
 pip install -r requirements.txt
 ```
+5. Model
+
+Instance segmenatation model available [here](https://drive.google.com/file/d/1Opi4wLHBbdSVWM6imeTC143JdjKeDUmN/view?usp=share_link)!
 
 ## Notebook examples
 
