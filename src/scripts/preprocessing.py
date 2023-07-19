@@ -41,15 +41,15 @@ def preprocessing:
     # Deletion of the patches also in the medata file
     metadata = metadata.drop(labels=filtered_coordinates, axis=0)
     metadata=metadata.reset_index()
-    annotated_thumbnail.save(os.path.join(output_folder,'thumbnail_eliminatedTile.jpeg'))
+    annotated_thumbnail.save(os.path.join(output_dir,'thumbnail_eliminatedTile.jpeg'))
     #Deletion of the low quality patches
-    #print('Inizial number of Tiles: ',len(os.listdir(os.path.join(output_folder,'tiles'))))
+    #print('Inizial number of Tiles: ',len(os.listdir(os.path.join(output_dir,'tiles'))))
     #print('Number of tiles to eliminate: ',len(filtered_xy))
     for coord in filtered_xy:
-        name_coord=output_folder+'/tiles/'+'x'+str(coord[1])+'_y'+str(coord[0])+'_w'+str(width)+'_h'+str(width)+'.png'
+        name_coord=output_dir+'/tiles/'+'x'+str(coord[1])+'_y'+str(coord[0])+'_w'+str(width)+'_h'+str(width)+'.png'
         os.remove(name_coord)
     #Code to identify all the tissue present in the slide, expecially if there are more than one!
-    thumb=hp.SlideReader(os.path.join(output_folder,"thumbnail.jpeg"))
+    thumb=hp.SlideReader(os.path.join(output_dir,"thumbnail.jpeg"))
     image,mask =thumb.get_tissue_mask()
     
     kernel_size = (args.kernel_size,args.kernel_size) #Change the kernel size
@@ -78,7 +78,7 @@ def preprocessing:
         
         if len(bounding_boxes)>1:
             # Load the thumbnail image
-            thumbnail_path=os.path.join(output_folder,'thumbnail.jpeg')
+            thumbnail_path=os.path.join(output_dir,'thumbnail.jpeg')
             thumbnail=Image.open(thumbnail_path).convert('RGB')
             annotated_thumbnail = thumbnail.copy()
             annotated = ImageDraw.Draw(annotated_thumbnail)
@@ -88,20 +88,20 @@ def preprocessing:
                 if (x_d>=box[0] and x_d<=box[0]+box[2]) and (y_d>=box[1] and y_d<=box[1]+box[3]):
                     annotated.rectangle([x_d, y_d, x_d+w, y_d+h]
                                             , outline=color[j-1], width=4)
-                    folder=os.path.join(output_folder,'tiles_n'+str(j))
+                    folder=os.path.join(output_dir,'tiles_n'+str(j))
                     if not os.path.exists(folder): 
                         os.makedirs(folder)
                     #Name sostitution not only for moving the patches to the relative folder but also to change the name to the correct format required for the following steps
-                    old_name_coord=output_folder+'/tiles/'+'x'+str(metadata['x'][i])+'_y'+str(metadata['y'][i])+'_w'+str(width)+'_h'+str(width)+'.png'
+                    old_name_coord=output_dir+'/tiles/'+'x'+str(metadata['x'][i])+'_y'+str(metadata['y'][i])+'_w'+str(width)+'_h'+str(width)+'.png'
                     new_name_coord=folder+'/'+'x-'+str(metadata['x'][i])+'_y-'+str(metadata['y'][i])+'.png'
                     shutil.move(old_name_coord, new_name_coord)
                 j+=1
-            annotated_thumbnail.save(os.path.join(output_folder,'thumbnail_diff_tissue.jpeg'))
+            annotated_thumbnail.save(os.path.join(output_dir,'thumbnail_diff_tissue.jpeg'))
 
         elif len(bounding_boxes)==1:
             #Name sostitution to change the name to the correct format required for the following steps
-                old_name_coord=output_folder+'/tiles/'+'x'+str(metadata['x'][i])+'_y'+str(metadata['y'][i])+'_w'+str(width)+'_h'+str(width)+'.png'
-                new_name_coord=output_folder+'/tiles/'+'x-'+str(metadata['x'][i])+'_y-'+str(metadata['y'][i])+'.png'
+                old_name_coord=output_dir+'/tiles/'+'x'+str(metadata['x'][i])+'_y'+str(metadata['y'][i])+'_w'+str(width)+'_h'+str(width)+'.png'
+                new_name_coord=output_dir+'/tiles/'+'x-'+str(metadata['x'][i])+'_y-'+str(metadata['y'][i])+'.png'
                 shutil.move(old_name_coord, new_name_coord)
 
 
