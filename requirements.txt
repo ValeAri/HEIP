@@ -1,4 +1,4 @@
-histoprep == 2.0.1
+histoprep == 1.0.8
 cellseg-models-pytorch[all]==0.1.16
 geopandas
 shapely
