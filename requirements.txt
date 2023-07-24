@@ -1,5 +1,6 @@
 histoprep == 1.0.8
 cellseg-models-pytorch[all]==0.1.16
+Pillow==9.5.0
 geopandas
 shapely
 pytest
