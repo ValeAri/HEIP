@@ -10,7 +10,7 @@
 
 HEIP is a fully fledged pipeline for extracting cell level information from hematoxylin and eosin (H&E) whole slides. It consists of different steps and related tools ranging from HE-image patching, pre-processing, cell segmentation and classification, until downstream feature extraction. The pipeline, written entirely in Python, is modular and it is easy to add additional or modify existing steps.
 
-To demonstrate the potential of HEIP, the pipeline was applied to analyze high-grade serous carcinoma H&E slides and the complete study is available in xxx journal at link.(Add journal name and link!)
+To demonstrate the potential of HEIP, the pipeline was applied to analyze high-grade serous carcinoma H&E slides and the complete study is available in Journal of Pathology Informatics at this [link](https://www.sciencedirect.com/science/article/pii/S2153353923001530#f0005)
 
 ## Set Up
 
