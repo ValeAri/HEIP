@@ -44,7 +44,7 @@ pip install -r requirements.txt
 ```
 5. Model
 
-Instance segmenatation model available [here](https://www.dropbox.com/scl/fi/jd3td009blmjv0lla0u80/last.ckpt?rlkey=jszlw4gqrklv85uq4r0lw5cuh&dl=0)!
+Instance segmenatation model available [here](https://www.dropbox.com/scl/fi/9nny6n9k58c2xopt6omwo/last.ckpt?rlkey=mqqac3mppf8qj97g1clxi9jrm&st=xi4ehtd3&dl=0)!
 
 ## Notebook examples
 
